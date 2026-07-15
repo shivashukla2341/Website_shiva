@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Website Shiva
 
-## Getting Started
+A production-grade e-commerce platform — Next.js 16 (App Router) + TypeScript + Tailwind CSS + shadcn/ui on the frontend, Supabase (Postgres + Auth + Storage) on the backend, with Razorpay/Stripe payments, Cloudinary media, Resend email, and AI-assisted search/recommendations/support.
 
-First, run the development server:
+This repository is being built in explicit stages; progress and remaining work are tracked as commits and in the sections below.
+
+## Tech Stack
+
+| Layer | Choice |
+|---|---|
+| Frontend | Next.js (App Router), React, TypeScript, Tailwind CSS v4, shadcn/ui, Framer Motion, Lucide Icons |
+| Backend | Next.js Route Handlers (REST API) |
+| Database | PostgreSQL via Supabase |
+| Auth | Supabase Auth (email/password, Google, GitHub, OTP) |
+| Payments | Razorpay + Stripe |
+| Storage | Cloudinary |
+| Email | Resend |
+| Validation / Forms | Zod + React Hook Form |
+| Charts | Recharts |
+| State | Zustand (cart/wishlist/compare), Server Components for server state |
+| Deployment | Vercel |
+| Analytics | Google Analytics, Microsoft Clarity |
+
+## Documentation
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — system architecture, request lifecycle, security layers
+- [`docs/DATABASE.md`](docs/DATABASE.md) — full schema reference, ER diagram, RLS model
+- [`docs/FOLDER_STRUCTURE.md`](docs/FOLDER_STRUCTURE.md) — project layout and conventions
+- [`docs/ENVIRONMENT_VARIABLES.md`](docs/ENVIRONMENT_VARIABLES.md) — every env var, what it's for, where to get it
+- [`docs/INSTALLATION.md`](docs/INSTALLATION.md) — local setup, step by step
+- [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) — releasing to Vercel + Supabase
+- [`docs/API.md`](docs/API.md) — REST API contract
+
+## Quick Start
 
 ```bash
+git clone <repo-url>
+cd website_shiva
+npm install
+cp .env.example .env.local   # fill in Supabase/Stripe/Razorpay/etc keys
+supabase start                # local Supabase stack (Postgres + Auth + Storage)
+supabase db reset             # applies supabase/migrations/*.sql + seed data
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). See [`docs/INSTALLATION.md`](docs/INSTALLATION.md) for the full walkthrough including provider setup (Supabase, Razorpay, Stripe, Cloudinary, Resend).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # start dev server
+npm run build    # production build
+npm run start    # run production build
+npm run lint     # eslint
+npm run test     # unit/integration tests (see docs once Step 13 lands)
+```
 
-## Learn More
+## Project Status
 
-To learn more about Next.js, take a look at the following resources:
+Being built step by step per the project brief: folder structure → architecture → database schema → env config → installation docs → base UI → auth → core pages → backend APIs → admin panel → payments → AI features → testing → deployment → production checklist. See commit history for progress.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Proprietary — all rights reserved unless a `LICENSE` file states otherwise.
