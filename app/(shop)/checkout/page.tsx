@@ -28,7 +28,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("card");
 
   const subtotal = CART_ITEMS.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const shipping = 0;
+  const shipping: number = 0;
   const total = subtotal + shipping;
 
   return (

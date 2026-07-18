@@ -14,7 +14,8 @@ export function ProductSort() {
   const searchParams = useSearchParams();
   const currentSort = searchParams.get("sort") || "featured";
 
-  const onSortChange = (value: string) => {
+  const onSortChange = (value: string | null) => {
+    if (!value) return;
     const params = new URLSearchParams(searchParams.toString());
     if (value === "featured") {
       params.delete("sort");

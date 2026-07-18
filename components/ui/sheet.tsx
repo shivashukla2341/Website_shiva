@@ -11,7 +11,12 @@ function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />
 }
 
-function SheetTrigger({ ...props }: SheetPrimitive.Trigger.Props) {
+import { Slot } from "@radix-ui/react-slot"
+
+function SheetTrigger({ asChild, ...props }: SheetPrimitive.Trigger.Props & { asChild?: boolean }) {
+  if (asChild) {
+    return <SheetPrimitive.Trigger data-slot="sheet-trigger" render={<Slot />} {...props} />
+  }
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
 }
 
@@ -66,7 +71,7 @@ function SheetContent({
               <Button
                 variant="ghost"
                 className="absolute top-3 right-3"
-                size="icon-sm"
+                size="icon"
               />
             }
           >

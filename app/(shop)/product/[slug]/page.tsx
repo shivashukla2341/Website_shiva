@@ -217,7 +217,7 @@ export default async function ProductDetailPage({
         </div>
       </div>
 
-      <ProductRecommendations currentProductId={product.id} category={product.category} />
+      <ProductRecommendations currentProductId={product.id} category={product.category.name} />
 
       {/* Tabs */}
       <Tabs defaultValue="description" className="w-full mt-12">

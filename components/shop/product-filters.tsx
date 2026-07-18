@@ -91,7 +91,7 @@ export function ProductFilters() {
         )}
       </div>
 
-      <Accordion type="multiple" defaultValue={["category", "brand", "price"]} className="w-full">
+      <Accordion className="w-full">
         {/* Categories */}
         <AccordionItem value="category" className="border-b-0">
           <AccordionTrigger className="py-3 text-sm font-medium hover:no-underline">

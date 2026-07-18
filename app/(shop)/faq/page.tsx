@@ -78,7 +78,7 @@ export default function FAQPage() {
           {FAQS.map((section, idx) => (
             <div key={idx}>
               <h2 className="text-2xl font-bold mb-6">{section.category}</h2>
-              <Accordion type="single" collapsible className="w-full bg-card border rounded-2xl px-6">
+              <Accordion className="w-full bg-card border rounded-2xl p-2">
                 {section.questions.map((faq, i) => (
                   <AccordionItem key={i} value={`item-${idx}-${i}`} className="border-b last:border-0">
                     <AccordionTrigger className="text-left font-medium py-4 hover:no-underline hover:text-primary">
