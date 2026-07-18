@@ -13,21 +13,7 @@ export const metadata: Metadata = {
   description: "Browse our wide range of products.",
 };
 
-// Mock data fallback if DB is not seeded
-const MOCK_PRODUCTS = Array.from({ length: 12 }).map((_, i) => ({
-  id: `prod-${i}`,
-  name: `Premium Product ${i + 1}`,
-  slug: `premium-product-${i + 1}`,
-  description: "High quality premium product with amazing features.",
-  price: 2999 + i * 1000,
-  compareAtPrice: 3999 + i * 1000,
-  images: [{ url: `https://picsum.photos/seed/${i + 100}/400/400`, isDefault: true }],
-  categoryId: "cat-1",
-  averageRating: 4.5,
-  reviewCount: Math.floor(Math.random() * 500) + 10,
-  isNewArrival: i < 3,
-  isBestSeller: i % 4 === 0,
-}));
+// Removed MOCK_PRODUCTS
 
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -35,12 +21,10 @@ interface ProductsPageProps {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams;
-  // Normally we would parse searchParams and fetch from Supabase
-  // const supabase = await createClient();
-  // const { data } = await supabase.from('products').select('*').eq('status', 'active');
   
-  // For now we will use MOCK_PRODUCTS since database might not be seeded with products
-  const products = MOCK_PRODUCTS;
+  const supabase = await createClient();
+  const { data } = await supabase.from('products').select('*').eq('status', 'active');
+  const products = data || [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

@@ -8,37 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProductCard, ProductCardSkeleton } from "@/components/shop/product-card";
 import type { Product } from "@/types";
 
-// Mock products — replace with API/RSC data fetch
-const MOCK_PRODUCTS: Product[] = Array.from({ length: 8 }, (_, i) => ({
-  id: String(i + 10),
-  slug: `product-${i + 10}`,
-  name: ["Sony WH-1000XM5 Headphones", "iPhone 15 Pro Max", "Nike Air Max 270", "Samsung 4K QLED TV",
-    "MacBook Pro M3", "Dyson V15 Detect", "Levi's 511 Slim Jeans", "Kindle Paperwhite"][i] ?? `Product ${i}`,
-  price: [24999, 134999, 12999, 89999, 199999, 49999, 3999, 14999][i] ?? 9999,
-  compareAtPrice: [39999, undefined, 14999, 59999, 10999, undefined, 2499, 99999][i],
-  averageRating: [4.9, 4.9, 4.6, 4.7, 4.5, 4.8, 4.3, 4.8][i],
-  reviewCount: [1234, 4532, 892, 543, 231, 89, 45, 122][i],
-  description: "Amazing product with great features",
-  categoryId: "cat-1",
-  images: [{ id: String(i), productId: String(i + 10), url: [
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
-    "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400",
-    "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
-    "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400",
-    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",
-    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
-    "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
-    "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400",
-  ][i] ?? "", sortOrder: 0, isDefault: true }],
-  tags: [], status: "active" as const, isFeatured: i < 4, isTrending: i >= 4, isBestSeller: i % 3 === 0, isNewArrival: i % 2 === 0,
-  taxRate: 18, taxInclusive: false, hasVariants: false, viewCount: 0, soldCount: 0,
-  createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-}));
+interface FeaturedProductsProps {
+  products: Product[];
+}
 
-export function FeaturedProducts() {
-  const featuredProducts = MOCK_PRODUCTS.filter((p) => p.isFeatured);
-  const newArrivals = MOCK_PRODUCTS.filter((p) => p.isNewArrival);
-  const bestSellers = MOCK_PRODUCTS.filter((p) => p.isBestSeller);
+export function FeaturedProducts({ products }: FeaturedProductsProps) {
+  const featuredProducts = products.filter((p) => p.isFeatured);
+  const newArrivals = products.filter((p) => p.isNewArrival);
+  const bestSellers = products.filter((p) => p.isBestSeller);
 
   return (
     <section className="py-16 md:py-20">

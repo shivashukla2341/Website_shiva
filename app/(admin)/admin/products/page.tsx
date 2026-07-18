@@ -8,15 +8,15 @@ export const metadata: Metadata = {
   title: "Manage Products | Admin",
 };
 
-const MOCK_PRODUCTS = [
-  { id: "1", name: "Apple iPhone 15 Pro", category: "Smartphones", price: "₹134,900", stock: 45, status: "Active" },
-  { id: "2", name: "Sony WH-1000XM5", category: "Audio", price: "₹29,990", stock: 12, status: "Active" },
-  { id: "3", name: "MacBook Air M2", category: "Laptops", price: "₹114,900", stock: 0, status: "Out of Stock" },
-  { id: "4", name: "Samsung Galaxy S24 Ultra", category: "Smartphones", price: "₹129,999", stock: 8, status: "Active" },
-  { id: "5", name: "Dell XPS 15", category: "Laptops", price: "₹189,990", stock: 22, status: "Draft" },
-];
+import { createClient } from "@/lib/supabase/server";
 
-export default function AdminProductsPage() {
+// Removed MOCK_PRODUCTS
+
+export default async function AdminProductsPage() {
+  const supabase = await createClient();
+  const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+  const products = data || [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -56,20 +56,20 @@ export default function AdminProductsPage() {
               </tr>
             </thead>
             <tbody className="divide-y">
-              {MOCK_PRODUCTS.map((product) => (
+              {products.map((product: any) => (
                 <tr key={product.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-6 py-4 font-semibold text-foreground">{product.name}</td>
-                  <td className="px-6 py-4">{product.category}</td>
-                  <td className="px-6 py-4 font-medium">{product.price}</td>
+                  <td className="px-6 py-4">{product.category_id}</td>
+                  <td className="px-6 py-4 font-medium">₹{product.price}</td>
                   <td className="px-6 py-4">
                     <span className={product.stock === 0 ? 'text-destructive font-bold' : ''}>
                       {product.stock}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${
-                      product.status === 'Active' ? 'bg-green-100 text-green-700' :
-                      product.status === 'Draft' ? 'bg-yellow-100 text-yellow-700' :
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold capitalize ${
+                      product.status === 'active' ? 'bg-green-100 text-green-700' :
+                      product.status === 'draft' ? 'bg-yellow-100 text-yellow-700' :
                       'bg-red-100 text-red-700'
                     }`}>
                       {product.status}

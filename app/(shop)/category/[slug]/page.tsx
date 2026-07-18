@@ -18,20 +18,7 @@ const CATEGORIES: Record<string, string> = {
   sports: "Sports & Outdoors",
 };
 
-const MOCK_PRODUCTS = Array.from({ length: 10 }).map((_, i) => ({
-  id: `cat-prod-${i}`,
-  name: `Category Product ${i + 1}`,
-  slug: `category-product-${i + 1}`,
-  description: "High quality premium product with amazing features.",
-  price: 1999 + i * 500,
-  compareAtPrice: 2499 + i * 500,
-  images: [{ url: `https://picsum.photos/seed/${i + 200}/400/400`, isDefault: true }],
-  categoryId: "cat-1",
-  averageRating: 4.2,
-  reviewCount: Math.floor(Math.random() * 200) + 5,
-  isNewArrival: i < 2,
-  isBestSeller: i === 3,
-}));
+// Removed MOCK_PRODUCTS
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -53,8 +40,15 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   
   const categoryName = CATEGORIES[slug] || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
-  // Normally fetch from Supabase
-  const products = MOCK_PRODUCTS;
+  const supabase = await createClient();
+  const { data: category } = await supabase.from('categories').select('id').eq('slug', slug).single();
+  
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('status', 'active')
+    .eq('category_id', category?.id || slug);
+  const products = data || [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

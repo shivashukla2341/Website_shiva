@@ -15,20 +15,9 @@ const BRANDS: Record<string, string> = {
   sony: "Sony",
 };
 
-const MOCK_PRODUCTS = Array.from({ length: 6 }).map((_, i) => ({
-  id: `brand-prod-${i}`,
-  name: `Brand Product ${i + 1}`,
-  slug: `brand-product-${i + 1}`,
-  description: "High quality premium product from this brand.",
-  price: 2999 + i * 1000,
-  compareAtPrice: 3999 + i * 1000,
-  images: [{ url: `https://picsum.photos/seed/${i + 500}/400/400`, isDefault: true }],
-  categoryId: "cat-1",
-  averageRating: 4.6,
-  reviewCount: 300,
-  isNewArrival: i === 0,
-  isBestSeller: i === 1,
-}));
+import { createClient } from "@/lib/supabase/server";
+
+// Removed MOCK_PRODUCTS
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -48,7 +37,13 @@ export default async function BrandPage({ params, searchParams }: BrandPageProps
   const { slug } = await params;
   const name = BRANDS[slug] || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
-  const products = MOCK_PRODUCTS;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('status', 'active')
+    .ilike('name', `%${name}%`);
+  const products = data || [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

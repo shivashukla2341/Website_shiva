@@ -10,6 +10,8 @@ import { TestimonialsSection } from "@/components/shop/home/testimonials-section
 import { NewsletterSection } from "@/components/shop/home/newsletter-section";
 import { AIRecommendations } from "@/components/shop/home/ai-recommendations";
 
+import { createClient } from "@/lib/supabase/server";
+
 export const metadata: Metadata = {
   title: "NexCart — Premium E-Commerce Experience",
   description:
@@ -24,7 +26,11 @@ export const metadata: Metadata = {
 // Revalidate every 60 seconds (ISR)
 export const revalidate = 60;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data } = await supabase.from('products').select('*').eq('status', 'active');
+  const products = data || [];
+
   return (
     <div className="flex flex-col">
       {/* Hero with banner carousel */}
@@ -37,13 +43,13 @@ export default function HomePage() {
       <FlashSaleSection />
 
       {/* Featured / New Arrivals */}
-      <FeaturedProducts />
+      <FeaturedProducts products={products} />
 
       {/* Promo banners */}
       <PromoBanners />
 
       {/* Trending products */}
-      <TrendingProducts />
+      <TrendingProducts products={products} />
 
       {/* AI Recommendations */}
       <AIRecommendations />

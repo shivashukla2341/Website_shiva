@@ -13,20 +13,9 @@ export const metadata: Metadata = {
   description: "Search for products on NexCart.",
 };
 
-const MOCK_PRODUCTS = Array.from({ length: 8 }).map((_, i) => ({
-  id: `search-prod-${i}`,
-  name: `Search Result ${i + 1}`,
-  slug: `search-result-${i + 1}`,
-  description: "Found product based on your search query.",
-  price: 999 + i * 200,
-  compareAtPrice: 1299 + i * 200,
-  images: [{ url: `https://picsum.photos/seed/${i + 400}/400/400`, isDefault: true }],
-  categoryId: "cat-1",
-  averageRating: 4.0,
-  reviewCount: 45,
-  isNewArrival: false,
-  isBestSeller: false,
-}));
+import { createClient } from "@/lib/supabase/server";
+
+// Removed MOCK_PRODUCTS
 
 interface SearchPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -40,7 +29,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     redirect('/products');
   }
 
-  const products = MOCK_PRODUCTS;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('status', 'active')
+    .ilike('name', `%${q}%`);
+  const products = data || [];
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">
